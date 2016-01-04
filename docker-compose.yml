@@ -2,6 +2,8 @@ boinc:
   image: boinc
   ports:
     - "31416:31416"
+  environment:
+    TERM: xterm
   devices:
     - "/dev/input:/dev/input"
     - "/dev/input/mice:/dev/input/mice"

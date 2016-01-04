@@ -3,7 +3,8 @@ FROM ubuntu:16.04
 MAINTAINER argent_smith (argentoff@gmail.com)
 
 RUN apt-get update && \
-    apt-get install -y boinc-client
+    apt-get install -y boinc-client \
+                       boinctui
 
 
 RUN mkdir -p /var/lib/boinc-client && \

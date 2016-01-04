@@ -13,7 +13,7 @@ WHY?
 ====
 
 Because I needed to a) run me a BOINC in a tiny controlled instance
-and b) excercise me a docker.
+and b) exercise me a docker.
 
 LICENSE
 =======

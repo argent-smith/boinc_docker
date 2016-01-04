@@ -1,0 +1,8 @@
+boinc:
+  image: boinc
+  ports:
+    - "31416:31416"
+  devices:
+    - "/dev/input:/dev/input"
+    - "/dev/input/mice:/dev/input/mice"
+  restart: unless-stopped

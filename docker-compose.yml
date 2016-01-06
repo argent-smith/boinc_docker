@@ -1,5 +1,5 @@
 boinc:
-  image: boinc
+  build: container
   ports:
     - "31416:31416"
   environment:
@@ -7,4 +7,6 @@ boinc:
   devices:
     - "/dev/input:/dev/input"
     - "/dev/input/mice:/dev/input/mice"
+  volumes:
+    - /tmp/backups:/backups
   restart: unless-stopped

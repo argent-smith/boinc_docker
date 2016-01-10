@@ -1,7 +1,7 @@
 boinc:
-  build: container
+  build: docker
   ports:
-    - "31416:31416"
+    - "127.0.0.1::31416"
   environment:
     TERM: xterm
   devices:

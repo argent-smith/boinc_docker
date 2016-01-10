@@ -20,16 +20,16 @@ ENV LC_ALL ru_RU.UTF-8
 RUN echo Europe/Moscow > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
+RUN rm -f /etc/boinc-client/gui_rpc_auth.cfg
+
+COPY ./config/gui_rpc_auth.cfg /etc/boinc-client/gui_rpc_auth.cfg
+
 RUN mkdir -p /var/lib/boinc-client && \
     chown -R boinc:boinc /var/lib/boinc-client
 
 VOLUME /var/lib/boinc-client
 
 WORKDIR /var/lib/boinc-client
-
-RUN rm -f /etc/boinc-client/gui_rpc_auth.cfg
-
-COPY ./config/gui_rpc_auth.cfg /etc/boinc-client/gui_rpc_auth.cfg
 
 USER boinc
 

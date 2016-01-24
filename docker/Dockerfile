@@ -2,6 +2,13 @@ FROM ubuntu:16.04
 
 MAINTAINER argent_smith (argentoff@gmail.com)
 
+# preparations
+ENV DEBIAN_FRONTEND noninteractive
+ENV TERM linux
+RUN sed -i 's/^mesg n$/tty -s \&\& mesg n/g' /root/.profile
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
+
 RUN apt-get update \
     && apt-get install -y locales \
                           boinc-client \
@@ -26,6 +33,12 @@ COPY ./config/gui_rpc_auth.cfg /etc/boinc-client/gui_rpc_auth.cfg
 
 RUN mkdir -p /var/lib/boinc-client && \
     chown -R boinc:boinc /var/lib/boinc-client
+
+RUN mkdir /backups && \
+    chown -R boinc:boinc /backups
+
+# go out of setup mode
+RUN echo 'debconf debconf/frontend select Dialog' | debconf-set-selections
 
 VOLUME /var/lib/boinc-client
 

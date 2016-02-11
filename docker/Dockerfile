@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:wily
 
 MAINTAINER argent_smith (argentoff@gmail.com)
 
@@ -11,6 +11,9 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 
 RUN apt-get update \
     && apt-get install -y locales \
+                          lib32z1 lib32ncurses5 \
+                          libstdc++6 \
+                          freeglut3 \
                           boinc-client \
                           boinctui \
     && apt-get clean -y \
@@ -41,6 +44,7 @@ RUN mkdir /backups && \
 RUN echo 'debconf debconf/frontend select Dialog' | debconf-set-selections
 
 VOLUME /var/lib/boinc-client
+VOLUME /backups
 
 WORKDIR /var/lib/boinc-client
 

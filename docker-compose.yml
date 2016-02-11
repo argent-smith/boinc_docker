@@ -8,5 +8,5 @@ boinc:
     - "/dev/input:/dev/input"
     - "/dev/input/mice:/dev/input/mice"
   volumes:
-    - /tmp/backups:/backups
+    - /backups:/backups
   restart: unless-stopped

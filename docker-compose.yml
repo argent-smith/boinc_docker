@@ -7,6 +7,4 @@ boinc:
   devices:
     - "/dev/input:/dev/input"
     - "/dev/input/mice:/dev/input/mice"
-  volumes:
-    - /backups:/backups
   restart: unless-stopped

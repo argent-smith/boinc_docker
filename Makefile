@@ -4,6 +4,7 @@ run:
 stop:
 	docker-compose stop
 
+# optional
 machine:
 	docker-machine create -d virtualbox \
 		--virtualbox-no-share \

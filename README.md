@@ -24,4 +24,10 @@ BSD of course.
 DOCS
 ====
 
-Makefile, Dockerfile, docker-compose.yml
+Dockerfile, docker-compose.yml
+
+NB
+==
+
+cp docker/config/gui_rpc_auth.cfg.sample docker/config/gui_rpc_auth.cfg
+vim docker/config/gui_rpc_auth.cfg

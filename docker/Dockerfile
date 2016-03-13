@@ -44,7 +44,6 @@ RUN mkdir /backups && \
 RUN echo 'debconf debconf/frontend select Dialog' | debconf-set-selections
 
 VOLUME /var/lib/boinc-client
-VOLUME /backups
 
 WORKDIR /var/lib/boinc-client
 

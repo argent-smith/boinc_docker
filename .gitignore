@@ -1,2 +1,4 @@
+.fishrc
 **/*.cfg
 docker-compose.yml
+rancher-compose.yml

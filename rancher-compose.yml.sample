@@ -1,0 +1,8 @@
+boinc:
+  health_check:
+    port: 31416
+    interval: 2000
+    unhealthy_threshold: 3
+    strategy: recreate
+    healthy_threshold: 2
+    response_timeout: 2000

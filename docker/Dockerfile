@@ -8,6 +8,18 @@ ENV TERM linux
 RUN sed -i 's/^mesg n$/tty -s \&\& mesg n/g' /root/.profile
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
+ENV GOSU_VERSION=1.7
+RUN set -x \
+    && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
+    && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
+    && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
+    && export GNUPGHOME="$(mktemp -d)" \
+    && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+    && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
+    && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
+    && chmod +x /usr/local/bin/gosu \
+    && gosu nobody true \
+    && apt-get purge -y --auto-remove ca-certificates wget
 
 RUN apt-get update \
     && apt-get install -y locales \
@@ -22,31 +34,30 @@ RUN apt-get update \
 # Locale
 RUN rm -rf /var/lib/apt/lists/* && \
     localedef -i ru_RU -c -f UTF-8 -A /usr/share/locale/locale.alias ru_RU.UTF-8
-ENV LANG ru_RU.UTF-8
-ENV LANGUAGE ru_RU:UTF-8
-ENV LC_ALL ru_RU.UTF-8
+
+ENV LANG=ru_RU.UTF-8 \
+    LANGUAGE=ru_RU:UTF-8 \
+    LC_ALL=ru_RU.UTF-8
 
 # TZ
 RUN echo Europe/Moscow > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
-RUN rm -f /etc/boinc-client/gui_rpc_auth.cfg
-
-COPY ./config/gui_rpc_auth.cfg /etc/boinc-client/gui_rpc_auth.cfg
-
-RUN mkdir -p /var/lib/boinc-client && \
-    chown -R boinc:boinc /var/lib/boinc-client
-
-RUN mkdir /backups && \
-    chown -R boinc:boinc /backups
-
 # go out of setup mode
 RUN echo 'debconf debconf/frontend select Dialog' | debconf-set-selections
 
-VOLUME /var/lib/boinc-client
+ENV BOINC_HOME=/var/lib/boinc-client \
+    BOINC_USER=boinc \
+    BOINC_GROUP=boinc
 
-WORKDIR /var/lib/boinc-client
+RUN rm -f /etc/boinc-client/gui_rpc_auth.cfg
 
-USER boinc
+COPY ./config/gui_rpc_auth.cfg /etc/boinc-client
+COPY ./run_container.sh /etc/boinc-client
 
-CMD boinc --allow_remote_gui_rpc
+VOLUME ${BOINC_HOME}
+
+ENTRYPOINT ["/etc/boinc-client/run_container.sh"]
+
+EXPOSE 31416
+CMD ["boinc", "--allow_remote_gui_rpc"]

@@ -3,8 +3,8 @@ FROM ubuntu:wily
 MAINTAINER argent_smith (argentoff@gmail.com)
 
 # preparations
-ENV DEBIAN_FRONTEND noninteractive
-ENV TERM linux
+ENV DEBIAN_FRONTEND=noninteractive \
+    TERM=linux
 RUN sed -i 's/^mesg n$/tty -s \&\& mesg n/g' /root/.profile
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
@@ -31,18 +31,6 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-# Locale
-RUN rm -rf /var/lib/apt/lists/* && \
-    localedef -i ru_RU -c -f UTF-8 -A /usr/share/locale/locale.alias ru_RU.UTF-8
-
-ENV LANG=ru_RU.UTF-8 \
-    LANGUAGE=ru_RU:UTF-8 \
-    LC_ALL=ru_RU.UTF-8
-
-# TZ
-RUN echo Europe/Moscow > /etc/timezone && \
-    dpkg-reconfigure -f noninteractive tzdata
-
 # go out of setup mode
 RUN echo 'debconf debconf/frontend select Dialog' | debconf-set-selections
 
@@ -50,12 +38,10 @@ ENV BOINC_HOME=/var/lib/boinc-client \
     BOINC_USER=boinc \
     BOINC_GROUP=boinc
 
-RUN rm -f /etc/boinc-client/gui_rpc_auth.cfg
-
-COPY ./config/gui_rpc_auth.cfg /etc/boinc-client
-COPY ./run_container.sh /etc/boinc-client
+ADD ./run_container.sh /etc/boinc-client
 
 VOLUME ${BOINC_HOME}
+WORKDIR ${BOINC_HOME}
 
 ENTRYPOINT ["/etc/boinc-client/run_container.sh"]
 

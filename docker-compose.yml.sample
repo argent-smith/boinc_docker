@@ -4,7 +4,9 @@ boinc:
     - "127.0.0.1::31416"
   environment:
     TERM: xterm
+    BOINC_GUI_PASSWORD: MyKewlPasswowd123
+    TIMEZONE: Europe/Moscow
   devices:
     - "/dev/input:/dev/input"
     - "/dev/input/mice:/dev/input/mice"
-  restart: unless-stopped
+  restart: always

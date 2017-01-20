@@ -1,12 +1,17 @@
-boinc:
-  build: docker
-  ports:
-    - "127.0.0.1::31416"
-  environment:
-    TERM: xterm
-    BOINC_GUI_PASSWORD: MyKewlPasswowd123
-    TIMEZONE: Europe/Moscow
-  devices:
-    - "/dev/input:/dev/input"
-    - "/dev/input/mice:/dev/input/mice"
-  restart: always
+---
+version: '2'
+volumes:
+  boinc-data:
+services:
+  boinc-cruncher:
+    image: registry.ag.local:5000/paul/boinc:v0.0.7
+    environment:
+      BOINC_GUI_PASSWORD: some_password
+      TIMEZONE: Europe/Moscow
+    devices:
+    - /dev/input:/dev/input:rwm
+    - /dev/input/mice:/dev/input/mice:rwm
+    volumes:
+    - boinc-data:/var/lib/boinc-client
+    ports:
+    - 31416:31416/tcp

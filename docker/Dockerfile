@@ -1,4 +1,4 @@
-FROM ubuntu:wily
+FROM ubuntu:xenial
 
 MAINTAINER argent_smith (argentoff@gmail.com)
 

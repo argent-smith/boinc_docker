@@ -7,8 +7,7 @@ fi
 
 if [ "$1" = 'boinc' ]; then
     if [ ! "$(cat /etc/timezone)" = "${TIMEZONE}" ]; then
-        echo "${TIMEZONE}" > /etc/timezone \
-        && dpkg-reconfigure -f noninteractive tzdata
+        ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
     fi
 
     echo "${BOINC_GUI_PASSWORD}" > /etc/boinc-client/gui_rpc_auth.cfg

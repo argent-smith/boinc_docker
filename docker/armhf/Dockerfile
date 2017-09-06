@@ -41,6 +41,7 @@ ENV BOINC_HOME=/var/lib/boinc-client \
     BOINC_GROUP=boinc
 
 ADD ./run_container.sh /etc/boinc-client
+ADD ./files/global_prefs_override.xml /etc/boinc-client
 
 VOLUME ${BOINC_HOME}
 WORKDIR ${BOINC_HOME}

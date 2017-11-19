@@ -10,7 +10,7 @@ if [ "$1" = 'boinc' ]; then
         ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
     fi
 
-    echo "${BOINC_GUI_PASSWORD}" > /etc/boinc-client/gui_rpc_auth.cfg
+    cat /run/secrets/boinc_gui_password > /etc/boinc-client/gui_rpc_auth.cfg
 
     mkdir -p ${BOINC_HOME}
     chmod 755 ${BOINC_HOME}

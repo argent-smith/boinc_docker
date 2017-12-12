@@ -1,16 +1,12 @@
-FROM ubuntu:yakkety
+FROM debian:stretch-slim
 
-MAINTAINER argent_smith (argentoff@gmail.com)
-
-# preparations
-ENV DEBIAN_FRONTEND=noninteractive \
-    TERM=linux
-RUN sed -i 's/^mesg n$/tty -s \&\& mesg n/g' /root/.profile
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+LABEL maintainer="argent_smith (argentoff@gmail.com)"
 
 ENV GOSU_VERSION=1.7
 RUN set -x \
     && apt-get update \
+    && apt-get dist-upgrade \
+    && apt-get install -y --no-install-recommends gpg \
     && apt-get install -y --no-install-recommends dirmngr \
     && apt-get install -y --no-install-recommends ca-certificates wget \
     && rm -rf /var/lib/apt/lists/* \
@@ -22,7 +18,7 @@ RUN set -x \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true \
-    && apt-get purge -y --auto-remove ca-certificates wget
+    && apt-get purge -y --auto-remove ca-certificates wget gpg
 
 RUN apt-get update \
     && apt-get install -y locales \
@@ -31,11 +27,9 @@ RUN apt-get update \
                           freeglut3 \
                           boinc-client \
                           boinctui \
+    && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
-
-# go out of setup mode
-RUN echo 'debconf debconf/frontend select Dialog' | debconf-set-selections
 
 ENV BOINC_HOME=/var/lib/boinc-client \
     BOINC_USER=boinc \

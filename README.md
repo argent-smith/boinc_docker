@@ -24,10 +24,50 @@ BSD of course.
 DOCS
 ====
 
-Dockerfile, docker-compose.yml
+See the Dockerfiles. Here's the compose file example:
 
-NB
-==
+```text
+version: '3.4'
 
-cp docker/config/gui_rpc_auth.cfg.sample docker/config/gui_rpc_auth.cfg
-vim docker/config/gui_rpc_auth.cfg
+x-custom:
+  &default-image
+  image: 'argentoff/boinc:v0.0.13-arm32v7'
+
+secrets:
+  boinc_gui_password:
+    external: true
+
+volumes:
+  boinc-data-1:
+    driver: nfs
+    driver_opts:
+      share: nas.ag.lan:/volumeUSB1/usbshare/homelab/netshare-storages/boinc-data-1
+
+services:
+  cruncher_1:
+    <<: *default-image
+    environment:
+      TIMEZONE: Europe/Moscow
+    volumes:
+      - boinc-data-1:/var/lib/boinc-client
+    ports:
+      - target: 31416
+        published: 31416
+        mode: host
+    secrets:
+      - boinc_gui_password
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.net.argentoff.boinc.cruncher == 1
+      restart_policy:
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        delay: 10s
+```
+
+Public Docker images are here: [argentoff/boinc](https://hub.docker.com/r/argentoff/boinc/)

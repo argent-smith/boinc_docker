@@ -70,3 +70,4 @@ services:
         delay: 10s
 ```
 
+Public Docker images are here: (argentoff/boinc)[https://hub.docker.com/r/argentoff/boinc/]

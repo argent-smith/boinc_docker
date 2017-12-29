@@ -15,11 +15,15 @@ WHY?
 Because I needed to a) run me a BOINC in a tiny controlled instance
 and b) exercise me a docker.
 
+Arm64v8 note
+============
+
+Since `v0.0.14-arm64v8` we can run *armhf aka arm32v7* applications!
+
 LICENSE
 =======
 
-BSD of course.
-
+MIT
 
 DOCS
 ====

@@ -5,7 +5,7 @@ LABEL maintainer="argent_smith (argentoff@gmail.com)"
 ENV GOSU_VERSION=1.7
 RUN set -x \
     && apt-get update \
-    && apt-get dist-upgrade \
+    && apt-get dist-upgrade -y \
     && apt-get install \
        -y \
        --no-install-recommends gpg \
@@ -23,12 +23,17 @@ RUN set -x \
     && gosu nobody true \
     && apt-get purge -y --auto-remove ca-certificates wget gpg
 
-RUN apt-get update \
+RUN dpkg --add-architecture armhf \
+    && apt-get update \
     && apt-get install -y locales \
                           libstdc++6 \
                           freeglut3 \
                           boinc-client \
                           boinctui \
+                          binutils:armhf \
+                          libstdc++6:armhf \
+                          libstdc++6-armhf-cross \
+                          libc6-armhf-cross \
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
@@ -38,6 +43,7 @@ ENV BOINC_HOME=/var/lib/boinc-client \
     BOINC_GROUP=boinc
 
 ADD ./run_container.sh /etc/boinc-client
+ADD ./files/cc_config.xml /etc/boinc-client
 
 VOLUME ${BOINC_HOME}
 WORKDIR ${BOINC_HOME}

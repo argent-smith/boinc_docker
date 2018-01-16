@@ -77,7 +77,7 @@ services:
 GUI PASSWORD SECRET NOTE
 ========================
 
-Gui RPC password is read at container startup from the file spacified in
+Gui RPC password is read at container startup from the file specified in
 `BOINC_GUI_PASSEORD_FILE` environment variable. Default file location (variable value)
 is `/run/secrets/boinc_gui_passwords`.
 

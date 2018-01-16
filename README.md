@@ -74,4 +74,11 @@ services:
         delay: 10s
 ```
 
+GUI PASSWORD SECRET NOTE
+========================
+
+Gui RPC password is read at container startup from the file spacified in
+`BOINC_GUI_PASSEORD_FILE` environment variable. Default file location (variable value)
+is `/run/secrets/boinc_gui_passwords`.
+
 Public Docker images are here: [argentoff/boinc](https://hub.docker.com/r/argentoff/boinc/)

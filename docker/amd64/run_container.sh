@@ -5,12 +5,14 @@ if [ "${1:0:1}" = '-' ]; then
     set -- boinc "$@"
 fi
 
+BOINC_GUI_PASSWORD_FILE=${BOINC_GUI_PASSWORD_FILE:-/run/secrets/boinc_gui_password}
+
 if [ "$1" = 'boinc' ]; then
     if [ ! "$(cat /etc/timezone)" = "${TIMEZONE}" ]; then
         ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
     fi
 
-    cat /run/secrets/boinc_gui_password > /etc/boinc-client/gui_rpc_auth.cfg
+    cat ${BOINC_GUI_PASSWORD_FILE} > /etc/boinc-client/gui_rpc_auth.cfg
 
     mkdir -p ${BOINC_HOME}
     chmod 755 ${BOINC_HOME}
